@@ -1,0 +1,21 @@
+.create {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    height: 60vh;
+}
+
+.createForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.createForm label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}

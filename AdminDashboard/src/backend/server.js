@@ -1,18 +1,23 @@
-/* eslint-disable no-undef */
-import experss from 'express';
-const app = experss();
+import express from 'express';
+const app = express();
 import cors from 'cors';
-import { collection } from './mongo';
-app.use(cors());
-app.use(experss.json());
-app.use(experss.urlencoded({ extended: true }));
+import {collection} from './models/users.js';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
+app.use(cors());
+app.use(express.json());
+dotenv.config();
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/",cors(),(req,res)=>{
     res.send("Hello World");
 });
 
 app.post("/login",async(req,res)=>{
+    // eslint-disable-next-line no-undef
+    await mongoose.connect(process.env.MONGO_URL);
+
     const{email,password} = req.body;
 
     try{

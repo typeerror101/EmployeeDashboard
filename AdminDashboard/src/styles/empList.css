@@ -1,0 +1,38 @@
+.emp {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
+    height: 60vh;
+}
+
+.emp h2 {
+    font-size: 50px;
+}
+
+.emp div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 2rem;
+}
+
+.emp li {
+    list-style: none;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.emp .createBTN {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 10px;
+    font-size: small;
+}
+
