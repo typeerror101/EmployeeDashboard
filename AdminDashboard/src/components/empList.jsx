@@ -1,27 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../styles/empList.css';
 import NavBar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 
 function EmployeeList() {
     const history = useNavigate();
-    const [employees] = useState([
-        { id: 1, name: 'John Doe' },
-        { id: 2, name: 'Jane Smith' },
-        { id: 3, name: 'Bob Johnson' },
-    ]);
+    const [employees, setEmployees] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleEdit = (id) => {
+    async function handleEdit(id) {
         // Handle edit logic here
         console.log(`Editing employee with ID ${id}`);
-    };
+    }
 
-    const handleDelete = (id) => {
-        // Handle delete logic here
+    async function handleDelete(id) {
+        try {
+           
+            await fetch(`http://localhost:5000/employees/${id}`, {
+                method: 'DELETE',
+            }).then((res) => {
+                if (res.data === 'Employee Deleted') {
+                    alert(`Employee ${res.json.name} is Deleted`);
+                } else {
+                    alert('Employee Deletion Failed');
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
+
+            setEmployees(employees.filter((employee) => employee.id !== id));
+
+        } catch (error) {
+            console.error('Error deleting employee', error);
+        }   
+
         console.log(`Deleting employee with ID ${id}`);
-    };
+    }
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -31,9 +46,27 @@ function EmployeeList() {
         history('/create');
     };
 
-    const filteredEmployees = employees.filter((employee) =>
-        employee.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // const filteredEmployees = employees.filter((employee) =>
+    //     employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+
+    useEffect(
+        () => {
+            const getEmployeesData = async () => {
+                const employeesFromServer = await getEmployees();
+                setEmployees(employeesFromServer);
+            };
+
+            getEmployeesData();
+        },
+        []
+    );  
+
+    async function getEmployees() {
+        const response = await fetch('http://localhost:5000/employees');
+        const data = await response.json();
+        return data;
+    }
 
     return (
         <>
@@ -47,15 +80,16 @@ function EmployeeList() {
             </div>
 
             <div>
-            <ul>
-                {filteredEmployees.map((employee) => (
-                    <li key={employee.id}>
-                        {employee.name}
-                        <button onClick={() => handleEdit(employee.id)}>Edit</button>
-                        <button onClick={() => handleDelete(employee.id)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
+                <ul>
+                    {employees.length > 0 &&
+                        employees.map((emp) => (
+                            <div key={emp._id}>
+                                {[emp.name, emp.age, emp.designation]} 
+                                <button onClick={() => handleEdit(emp._id)}>Edit</button>
+                                <button onClick={() => handleDelete(emp._id)}>Delete</button>
+                            </div>
+                        ))}
+                </ul>
             </div>
         </div>
         </>

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import NavBar from "./Navbar";
 import '../styles/create.css';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const CreateEmployee = () => {
+function CreateEmployee() {
+    const history = useNavigate();
     const [employee, setEmployee] = useState({
         name: '',
         age: '',
@@ -13,10 +16,30 @@ const CreateEmployee = () => {
         setEmployee({ ...employee, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
         
-    };
+        try {
+            
+            await axios.post('http://localhost:5000/create', {
+                name: employee.name,
+                age: employee.age,
+                designation: employee.designation,
+            }).then((res) => {
+                if (res.data === 'Employee Created') {
+                    alert('Employee Created');
+                    history('/emplist');
+                } else {
+                    alert('Employee Creation Failed');
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
+
+        } catch (error) {
+            console.error('Error creating employee', error);
+        }
+    }
 
     return (
         <>
@@ -44,6 +67,6 @@ const CreateEmployee = () => {
         </div>
         </>
     );
-};
+}
 
 export default CreateEmployee;
