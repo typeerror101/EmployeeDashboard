@@ -12,7 +12,7 @@ function NavBar() {
             <CustomLink to='/emplist'>Employee List</CustomLink>
         </ul>
         <ul>
-            <Link to='/login' className='logout'>Logout</Link>
+            <Link to='/' className='logout'>Logout</Link>
         </ul>
           
       </nav>
